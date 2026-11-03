@@ -4,9 +4,10 @@ import { bearer } from "better-auth/plugins";
 
 import { prisma } from "./database";
 import { env } from "./env";
+import { sendPasswordResetEmail } from "@/lib/email";
 
 // Developer A owns Better Auth infrastructure: adapter wiring, session support, and auth-level plugins.
-const baseURL = `http://localhost:${env.PORT}`;
+const baseURL = env.BETTER_AUTH_URL ?? `http://localhost:${env.PORT}`;
 
 export const auth = betterAuth({
   baseURL,
@@ -18,6 +19,32 @@ export const auth = betterAuth({
   // Bearer support lets API clients authenticate with Authorization: Bearer xxx in addition to cookies.
   plugins: [bearer()],
   // OAuth providers are configured here; route/controller wiring belongs to the auth module owner.
+  socialProviders: {
+    ...(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET
+      ? {
+          google: {
+            clientId: env.GOOGLE_CLIENT_ID,
+            clientSecret: env.GOOGLE_CLIENT_SECRET,
+          },
+        }
+      : {}),
+    ...(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET
+      ? {
+          github: {
+            clientId: env.GITHUB_CLIENT_ID,
+            clientSecret: env.GITHUB_CLIENT_SECRET,
+          },
+        }
+      : {}),
+    ...(env.APPLE_CLIENT_ID && env.APPLE_CLIENT_SECRET
+      ? {
+          apple: {
+            clientId: env.APPLE_CLIENT_ID,
+            clientSecret: env.APPLE_CLIENT_SECRET,
+          },
+        }
+      : {}),
+  },
   user: {
     // The app schema calls the Better Auth image field avatarUrl.
     fields: {
@@ -57,8 +84,12 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
+    resetPasswordTokenExpiresIn: 60 * 60,
     sendResetPassword: async ({ user, url }) => {
-      console.info(`Password reset requested for ${user.email}: ${url}`);
+      await sendPasswordResetEmail({
+        email: user.email,
+        resetUrl: url,
+      });
     },
   },
   emailVerification: {

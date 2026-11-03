@@ -1,1 +1,0 @@
-export { resetPasswordHandler as POST } from "@/modules/auth/auth.router";

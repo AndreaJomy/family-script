@@ -189,6 +189,20 @@ export default function Navbar() {
             PRODUCTS
           </Link>
 
+          <Link
+            href="/welcome"
+            className="
+              futura-light
+              text-[16px]
+              tracking-wide
+              transition-opacity
+              duration-300
+              hover:opacity-60
+            "
+          >
+            SIGN IN
+          </Link>
+
         </div>
 
         {/* ==================================================
@@ -474,6 +488,25 @@ export default function Navbar() {
               "
             >
               PRODUCTS
+            </Link>
+
+            <Link
+              href="/welcome"
+              className="
+                mobile-menu-link
+                futura-light
+                py-4
+                text-center
+                text-[18px]
+                tracking-[0.16em]
+                text-[rgb(233_231_218)]
+                transition-opacity
+                duration-300
+                hover:opacity-60
+                sm:text-[20px]
+              "
+            >
+              SIGN IN
             </Link>
 
           </nav>

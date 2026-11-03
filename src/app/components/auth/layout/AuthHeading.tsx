@@ -6,7 +6,7 @@
 export default function AuthHeading() {
   return (
     <h1
-      className="absolute left-1/2 top-[289px] w-[365px] -translate-x-1/2 -translate-y-1/2 text-center text-[50px] font-medium leading-[54px]"
+      className="absolute left-1/2 top-[289px] w-[min(390px,calc(100vw-48px))] -translate-x-1/2 -translate-y-1/2 text-center text-[52px] font-medium leading-[1.08]"
       style={{ fontFamily: '"futura-pt", "Futura", sans-serif' }}
     >
       <span className="text-warm-beige">Record &amp; discover</span>{" "}

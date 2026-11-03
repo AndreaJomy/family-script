@@ -4,3 +4,8 @@ export { AuthBackdrop, AuthGlow } from "./layout/AuthBackground";
 export { default as AuthLogo } from "./layout/AuthLogo";
 export { default as AuthHeading } from "./layout/AuthHeading";
 export { default as JoinOptionCard } from "./welcome/JoinOptionCard";
+export { default as SignUpForm } from "./forms/SignUpForm";
+export { default as SignInForm } from "./forms/SignInForm";
+export { default as ForgotPasswordForm } from "./forms/ForgotPasswordForm";
+export { default as ResetPasswordForm } from "./forms/ResetPasswordForm";
+export { default as ResetPasswordSuccess } from "./forms/ResetPasswordSuccess";

@@ -48,6 +48,19 @@ export const authService = {
       };
     } catch (error) {
       if (error instanceof APIError) {
+        const errorCode = error.body?.code;
+
+        if (
+          errorCode === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL" ||
+          error.message.toLowerCase().includes("already exists")
+        ) {
+          return {
+            success: false,
+            status: 409,
+            message: "EMAIL_TAKEN",
+          };
+        }
+
         return {
           success: false,
           status: error.statusCode ?? 400,
@@ -197,16 +210,16 @@ export const authService = {
     }
   },
 
-  async getGoogleSignInUrl() {
+  async getSocialSignInUrl(provider: "google" | "github" | "apple") {
     const result = await auth.api.signInSocial({
       body: {
-        provider: "google",
-        callbackURL: "/auth/me",
+        provider,
+        callbackURL: "/welcome",
       },
     });
 
     if (!result.url) {
-      throw new Error("Better Auth did not return a Google sign-in URL.");
+      throw new Error(`Better Auth did not return a ${provider} sign-in URL.`);
     }
 
     return result.url;

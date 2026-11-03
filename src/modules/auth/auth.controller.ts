@@ -42,7 +42,14 @@ export const authController = {
 
       if (!result.success) {
         return NextResponse.json(
-          { success: false, message: result.message },
+          {
+            success: false,
+            message:
+              result.message === "EMAIL_TAKEN"
+                ? "This email address is already registered."
+                : result.message,
+            code: result.message === "EMAIL_TAKEN" ? "EMAIL_TAKEN" : undefined,
+          },
           { status: result.status },
         );
       }
@@ -291,7 +298,11 @@ export const authController = {
       }
 
       return NextResponse.json(
-        { success: true, message: "Password reset email sent." },
+        {
+          success: true,
+          message:
+            "If an account exists for this email, a password reset link has been sent.",
+        },
         { status: 200 },
       );
     } catch (error) {
@@ -354,9 +365,20 @@ export const authController = {
   },
 
   async googleSignIn() {
-    const url = await authService.getGoogleSignInUrl();
+    const url = await authService.getSocialSignInUrl("google");
 
-    // Redirects the browser straight to Google's consent screen
+    return NextResponse.redirect(url);
+  },
+
+  async githubSignIn() {
+    const url = await authService.getSocialSignInUrl("github");
+
+    return NextResponse.redirect(url);
+  },
+
+  async appleSignIn() {
+    const url = await authService.getSocialSignInUrl("apple");
+
     return NextResponse.redirect(url);
   },
 };
